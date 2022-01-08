@@ -21,8 +21,7 @@ const displayMessage = function (msg) {
 document.querySelector('.number').textContent = secretNumber;
 check.addEventListener('click', function () {
     let guess = Number(document.querySelector('.guess').value);
-    // console.log(guess, typeof guess);
-    
+
     // When there is no input
     if (!guess) {
        displayMessage("🎃 No number!"); 
@@ -50,7 +49,7 @@ check.addEventListener('click', function () {
             score--;
             document.querySelector('.score').textContent = score;
         }else{
-            document.querySelector('.message').textContent = "Game over!!!";
+            displayMessage("Game over!!!");
             score = 0;
             document.querySelector('.score').textContent = score;
         }
@@ -91,6 +90,7 @@ again.addEventListener('click', function () {
     displayMessage("Start guessing...");
     document.querySelector('body').style.backgroundColor = '#222';
     document.querySelector('.guess').value = '';
+    
     secretNumber = Math.trunc(Math.random() * 20) + 1;
     document.querySelector('.number').textContent = secretNumber;
     // document.querySelector('.number').textContent = '?';
