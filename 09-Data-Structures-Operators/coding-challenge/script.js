@@ -187,22 +187,26 @@ const camelCase = function (underscore) {
     // }
 
 
-    let arrUnderscore = underscore.split(" ");
+    let arrUnderscore = underscore.split("\n");
     let arr = [];
     let arr2 =[];
     for (const el of arrUnderscore) {
-      arr.push(el.toLowerCase().replace('_', ' '));
-      // console.log(el.split('_'));
+      arr.push(el.trim().toLowerCase().replace('_', ' '));
     }
+
     for (const el of arr) {
       // console.log(el.split(' '));
       arr2.push(el.split(" "));
     }
 
-    for (const el of arr2) {
-      console.log(el[0] + el[1].replace(el[1][0], el[1][0].toUpperCase()));
+    for (const [i, [first, second]] of arr2.entries()) {
+      let mark = '✅';
+      let result= `${first}${second.replace(second[0], second[0].toUpperCase())}`
+      console.log(`${result.padEnd(20)} ${mark.repeat(i+1)}`);
+      // console.log(el[0] + el[1].replace(el[1][0], el[1][0].toUpperCase()));
     }
     // console.log(arr2);
+    // console.log(arrUnderscore);
     // console.log(arr);
 };
 
@@ -212,6 +216,8 @@ document.querySelector('textarea').value;
 
 document.querySelector('button').addEventListener('click', function () {
   let textValue = document.querySelector('textarea').value;
+
+  // console.log(textValue);
   camelCase(textValue);
 })
 
