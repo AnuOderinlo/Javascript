@@ -1,5 +1,5 @@
 'use strict';
-/*
+
 // Data needed for a later exercise
 const flights =
   '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
@@ -26,9 +26,70 @@ const restaurant = {
       close: 24,
     },
   },
+
+  order(starterIndex, mainIndex) {
+    return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
+  },
+
+  orderDelivery({ starterIndex = 1, mainIndex = 0, time = '20:00', address }) {
+    console.log(
+      `Order received! ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}`
+    );
+  },
+
+  orderPasta(ing1, ing2, ing3) {
+    console.log(
+      `Here is your declicious pasta with ${ing1}, ${ing2} and ${ing3}`
+    );
+  },
+
+  orderPizza(mainIngredient, ...otherIngredients) {
+    console.log(mainIngredient);
+    console.log(otherIngredients);
+  },
 };
+/*
+const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+
+//OPTIONAL CHAINING
+// console.log(restaurant.openingHours.mon?.open);
+
+for (const day of days) {
+  // console.log(day);
+  const open = restaurant.openingHours[day]?.open ?? 'closed';
+  console.log(`On ${day} we open at ${open}`);
+}
 
 
+//For methods
+
+console.log(restaurant.order?.(0,1) ?? 'Method does not exist');
+// console.log(restaurant.orderBurger?.(0,1) ?? 'Method does not exist');
+
+
+//Looping through OBJECTS ---  note, objects are not iterable
+const properties = Object.keys(restaurant.openingHours);
+
+const entries = Object.entries(restaurant.openingHours);
+
+// console.log(entries);
+
+for (const [day, {open, close}] of entries) {
+  console.log(`On ${day}, we open at ${open} and close at ${close}`);
+}
+
+let openStr = `We are open for ${properties.length} days: `
+for (const day of properties) {
+  openStr += `${day} ,`;
+}
+console.log(openStr);
+
+
+
+
+
+
+/*
 //DESTRUCTURING IN ARRAY
 
 const arr = [2,3,4];
@@ -89,6 +150,107 @@ const numbers = [23, 10, 10];
 
 // console.log(add(...numbers)); 
 console.log(add('a', 'n', 'u')); 
+
+
+// FOR OF LOOP
+for (const item of restaurant.starterMenu) {
+  // console.log(item);
+}
+console.log('********************')
+//Getting the index in FOR OF LOOP
+for (const [i, el] of restaurant.starterMenu.entries()) {
+  // console.log(item);
+  // console.log(el);
+}
+
+// SET ITERABLE
+// How to use set
+// Set takes in an array as a parameter
+
+let foodItems = new Set(['rice', 'beans', 'yam', 'potatoes', 'yam', 'beans']);
+foodItems.add('yam-flour');
+foodItems.delete('yam');
+
+for (const food of foodItems) {
+  console.log(food);
+}
+console.log(foodItems);
+
+//How to convert set to array::: Just use the spread operator
+console.log([...foodItems]);
+
 */
 
-//CODING CHALLENGE
+
+//MAP FUNDAMENTAL
+const canteen = new Map();
+
+canteen.set('location', 'Ikeja').set('foods', ['rice', 'amala', 'beans']);
+
+
+// console.log(canteen);
+
+
+//WORKING WITH STRINGS
+const airline = "IBOM AIR";
+const plane = "Q20334";
+
+console.log(airline.indexOf('R'));
+console.log(airline.lastIndexOf(' '));
+console.log(airline.slice(0, airline.indexOf(' ')));
+console.log(airline.slice(airline.indexOf(' ')+1));
+
+//More Example
+
+function serializeEmail(email) {
+  return email.toLowerCase().trim();
+}
+
+function capitalizeLetter(name) {
+  name = name.toLowerCase();
+  name = name[0].toUpperCase() + name.slice(1);
+  return name;
+}
+
+const email = "  AnuOderinlo@GMail.com  ";
+console.log(serializeEmail(email));
+console.log(capitalizeLetter("aNUoluwapo"));
+
+//SOME STRINGS METHOD
+  // String.replace();
+  // String.includes();
+  // String.startstWith()
+  // String.endsWith()
+
+// Using Split() method on string
+
+const sentence = "The learning curve in programming is hard";
+
+console.log(sentence.split(' ').length);
+
+
+const capitalizeNames = function (names) {
+  names = names.split(' ');
+  let nameArr = [];
+
+  for (const name of names) {
+   nameArr.push(name.replace(name[0], name[0].toUpperCase()))
+  }
+  console.log(nameArr.join(''));
+}
+
+capitalizeNames('anuoluwapo ezekiel oderinlo');
+
+//PADDING STRING
+const str = "good padding";
+
+// console.log(str.padStart(15, '*').padEnd(19, '*'));
+
+const maskCreditCard = function (cardNumber) {
+  let cardString = String(cardNumber) ;
+  let cardStringSlice = cardString.slice(-4);
+  console.log(cardStringSlice.padStart(cardString.length, '*'));
+}
+
+// maskCreditCard(124558500255572)
+
