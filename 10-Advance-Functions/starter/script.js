@@ -1,6 +1,6 @@
 'use strict';
 
-
+/*
 const oneWord = function (str) {
     return str.replace(/ /g, '').toLowerCase();
 }
@@ -44,7 +44,7 @@ const greeter = greet('Heyiii');
  greeter('Tayo')
 
  /* THE CALL AND APPLY METHOD*/
-
+/*
  const ibomair = {
     airline: 'Ibom air',
     code: 'IB',
@@ -167,3 +167,49 @@ document.querySelector('.poll').addEventListener('click', poll.registerNewAnswer
 // console.log(poll);
 // poll.displayResults("2,5,4,3");
 
+//CLOSURES
+/*
+let f;
+const g = function () {
+    const a = 23;
+    f = function () {
+        console.log(a * 2);
+    }
+}
+
+const h = function () {
+    const b = 32;
+    f = function () {
+        console.log(b * 2);
+    }
+}
+
+g();
+f();
+// console.dir(f)
+console.log('RE-assinging f function');
+h();
+f()
+// console.dir(f)
+
+*/
+//example 2
+
+
+// setTimeout(() => {
+//     console.log("This happened after 1 seconds");
+// }, 1000);
+
+
+
+// CHALLENGE 2
+
+
+(function(){
+  const header = document.querySelector('h1');
+  header.style.color = 'red';
+
+  document.querySelector('body').addEventListener('click', function () {
+      header.style.color ='blue'
+  })
+})();
