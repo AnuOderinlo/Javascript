@@ -65,18 +65,71 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 //THE BACKIST APP
 
+//login
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const currentAcct = accounts.find(function (acct) {
+      return acct.username === inputLoginUsername.value &&
+      acct.pin == Number(inputLoginPin.value);
+  })
+  if (currentAcct) {
+    console.log(currentAcct);
+    labelWelcome.textContent = `Welcome, ${currentAcct.owner.split(' ')[0]}`;
+    containerApp.style.opacity = 100;
+    
+    //hides the inputs field
+    inputLoginPin.value = inputLoginUsername.value = '';
+    inputLoginPin.blur();
+
+    displayBalance(currentAcct.movements);
+    summary(currentAcct);
+    displayMovement(currentAcct.movements);
+    // console.log('You are logged in');
+  }else{
+    labelWelcome.textContent = `username or password is not correct`;
+    containerApp.style.opacity = 0;
+    // console.log('username or password is not correct');
+  }
+})
+
+
+const displayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov)=> acc + mov);
+  labelBalance.textContent = `${balance} EUR`
+}
+
+
+
+
+const summary = function (acct) {
+  const income = acct.movements.filter(mov => mov > 0).reduce((acc, mov)=> acc+mov, 0);
+  
+  const out = acct.movements
+    .filter((mov, i, arr) => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  console.log(out);
+  console.log(income);
+
+
+  const interest = acct.movements.filter(mov => mov > 0).map(mov=> mov * acct.interestRate).reduce((acc, mov)=> acc+mov);
+  labelSumIn.textContent = `${income}€`;
+  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumInterest.textContent = `${interest}€`;
+  // console.log(income + out);
+}
+
 
 const displayMovement = function (movements) {
   containerMovements.innerHTML = '';
   movements.forEach((mov,i) => {
-    const type = mov > 0 ? 'withdrawal' : 'deposit';
+    const type = mov < 0 ? 'withdrawal' : 'deposit';
     const html = `
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
           <div class="movements__date">3 days ago</div>
-          <div class="movements__value">${mov}€</div>
+          <div class="movements__value">${Math.abs(mov)}€</div>
         </div>
-    
     `;
 
     containerMovements.insertAdjacentHTML('afterbegin', html)
@@ -84,7 +137,20 @@ const displayMovement = function (movements) {
   });
 }
 
-displayMovement(account1.movements)
+
+
+
+const createUsername = function (accts) {
+
+  accts.forEach(acc => {
+    acc.username = acc.owner.toLowerCase().split(' ').map(el=>el[0]).join('');
+    // console.log(acc);
+  });
+  
+}
+
+createUsername(accounts)
+
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -92,12 +158,12 @@ displayMovement(account1.movements)
 
 
 
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+/*
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
 
-/*
 const arr = ['a', 'b', 'c', 'd', 'e'];
 
 //SLICE METHOD
@@ -145,3 +211,43 @@ currencies.forEach(function (value, keys, map) {
   console.log(`${keys}: ${value}`);
 })
   */
+
+/*
+//MAP METHOD
+const eurToUsd = 1.1;
+
+const movementUSD = movements.map(function (mov) {
+  return mov * eurToUsd;
+})
+//arrow function
+const movementUsdArrow = movements.map(mov=> mov * eurToUsd)
+
+console.log(movementUSD);
+console.log(movementUsdArrow);
+
+
+//FILTER METHOD
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const deposits = movements.filter(mov=> mov > 0)
+
+const withdraw = movements.filter(mov => mov < 0);
+
+console.log(deposits);
+console.log(withdraw);
+
+
+//REDUCE METHOD
+
+const balance = movements.reduce(function (acc, cur) {
+  return acc + cur;
+}, 0)
+
+console.log(balance);
+
+//FIND METHOD: THIS RETURN THE FIRST ELEMENT IN THE ARRAY THAT MATCHES THE CONDITION
+
+const acctName = accounts.find(name => name.owner === 'Sarah Smith');
+
+console.log(acctName);
+*/

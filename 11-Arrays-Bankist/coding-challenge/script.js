@@ -63,8 +63,8 @@ currencies.forEach(function (value, keys, map) {
   */
 
 
-//CODING CHALLENGE
-
+//CODING CHALLENGE 1
+/*
 const checkDogs = function (dogsJulia, dogsKate) {
     //task 1 
     const dogsJuliaCopied = dogsJulia.slice(1,3);
@@ -78,12 +78,40 @@ const checkDogs = function (dogsJulia, dogsKate) {
     bothData.forEach(function (age, i) {
         if (age >= 3) {
             console.log(`Dog number ${i+1} is an adult, and is ${age} years old`);
-        }else{
+          }else{
             console.log(`Dog number ${i+1} is still a puppy 🐶`);
-
+            
         }
     })
     
-}
+  }
 
 checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+*/
+
+//CODING CHALLENGE 2
+
+// const calAverageHumanAge =function (ages) {
+//   const humanAge = ages.map(age => age <= 2? 2 * age : 16 + age *4);
+//   const adultAge = humanAge.filter((hage) => hage >=18 );
+//   const averageAge = adultAge.reduce((acc, cur)=> acc+cur, 0) / adultAge.length
+//   console.log(humanAge);
+//   console.log(adultAge);
+//   console.log(averageAge);
+// }
+
+// calAverageHumanAge([3, 5, 2, 12, 7]);
+
+//CODING CHALLENGE 3: Rewriting challenge 2 in a chaining form
+
+const calAverageHumanAge =function (ages) {
+
+  const averageAgeChain = ages
+    .map((age) => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter((hage) => hage >= 18)
+    .reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+  
+  console.log(averageAgeChain);
+}
+
+calAverageHumanAge([3, 5, 2, 12, 7]);
