@@ -298,3 +298,14 @@ const acctName = accounts.find(name => name.owner === 'Sarah Smith');
 
 console.log(acctName);
 */
+
+//SOME METHOD
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+//used for equality
+const depositAvailable = movements.includes(4000);
+
+//Used for condition
+const deposit = movements.some(mov => mov >= 3000);
+console.log(depositAvailable);
+console.log(deposit);
