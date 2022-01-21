@@ -138,6 +138,31 @@ btnLogin.addEventListener('click', function (e) {
     inputCloseUsername.value = inputClosePin.value = '';
 
   })
+
+  //Get Loan
+  btnLoan.addEventListener('click', function (e) {
+    e.preventDefault();
+    const amountLoan = Number(inputLoanAmount.value);
+    const depositGreater = currentAcct.movements.some(mov => mov > 0.10 * amountLoan);
+
+
+
+    if (amountLoan > 0 && depositGreater) {
+      console.log('loan approved');
+
+      //amount added to receiver balance and deducted from sender
+      currentAcct.movements.push(amountLoan);
+
+      //update sender interface account
+      updateAccountUI(currentAcct);
+
+      //empty the inputs(amountLoan);
+      inputLoanAmount.value = '';
+    }
+
+
+    // console.log(depositGreater);
+  })
 })
 
 
@@ -147,8 +172,6 @@ const updateAccountUI = function (acct) {
   summary(acct);
   displayMovement(acct.movements);
 }
-
-
 
 const displayBalance = function (acct) {
   acct.balance = acct.movements.reduce((acc, mov)=> acc + mov);
@@ -168,7 +191,6 @@ const summary = function (acct) {
   labelSumInterest.textContent = `${interest}€`;
   // console.log(income + out);
 }
-
 
 const displayMovement = function (movements) {
   containerMovements.innerHTML = '';
@@ -301,6 +323,7 @@ console.log(acctName);
 
 //SOME METHOD
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const movements = [200, 450, 400, 3000, 650, 130, 70, 1300];
 
 //used for equality
 const depositAvailable = movements.includes(4000);
@@ -309,3 +332,7 @@ const depositAvailable = movements.includes(4000);
 const deposit = movements.some(mov => mov >= 3000);
 console.log(depositAvailable);
 console.log(deposit);
+
+//EVERY METHOD: If every element in an array pass the condition
+const depositAll = movements.every(mov => mov > 0);
+console.log(depositAll);
