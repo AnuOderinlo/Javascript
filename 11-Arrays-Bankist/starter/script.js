@@ -336,3 +336,20 @@ console.log(deposit);
 //EVERY METHOD: If every element in an array pass the condition
 const depositAll = movements.every(mov => mov > 0);
 console.log(depositAll);
+
+//FLAT METHOD: this combines all one level nested array into a single array
+
+const arr = [[1,2,3], [4,5,6], 7,8];
+const arr2 = [[[1,2],3], [4,[5,6]], 7,8];
+
+console.log(arr.flat());
+console.log(arr2.flat(2));
+
+//Example from the Backist app. Calculate the total movement in all accounts
+const overallAmount = accounts.map(mov=> mov.movements).flat().reduce((acc,cur)=> acc + cur);
+
+console.log(overallAmount);
+
+//USING THE FLATMAP METHOD.
+const overallAmount2 = accounts.flatMap(mov=> mov.movements).reduce((acc,cur)=> acc + cur);
+console.log(overallAmount2);
