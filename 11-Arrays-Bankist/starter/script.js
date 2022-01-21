@@ -101,7 +101,11 @@ btnLogin.addEventListener('click', function (e) {
       acct => inputTransferTo.value === acct.username
     );
     // console.log(receiverAcct, currentAcct);
-    if (amount > 0 && amount <= currentAcct.balance && receiverAcct?.username !== currentAcct.username) {
+    if (
+      amount > 0 &&
+      amount <= currentAcct.balance &&
+      receiverAcct?.username !== currentAcct.username
+    ) {
       console.log('You can transfer the money');
 
       //empty the inputs(amount and username);
@@ -121,31 +125,31 @@ btnLogin.addEventListener('click', function (e) {
     e.preventDefault();
     console.log('delete');
 
-    if (inputCloseUsername.value === currentAcct.username && Number(inputClosePin.value) === currentAcct.pin) {
-
+    if (
+      inputCloseUsername.value === currentAcct.username &&
+      Number(inputClosePin.value) === currentAcct.pin
+    ) {
       const index = accounts.findIndex(function (acct) {
         return inputCloseUsername.value === currentAcct.username;
       });
 
       //delete current account
-      accounts.splice(index,1);
+      accounts.splice(index, 1);
 
       //update UI by hiding account
       containerApp.style.opacity = 0;
-
     }
     console.log(accounts);
     inputCloseUsername.value = inputClosePin.value = '';
-
-  })
+  });
 
   //Get Loan
   btnLoan.addEventListener('click', function (e) {
     e.preventDefault();
     const amountLoan = Number(inputLoanAmount.value);
-    const depositGreater = currentAcct.movements.some(mov => mov > 0.10 * amountLoan);
-
-
+    const depositGreater = currentAcct.movements.some(
+      mov => mov > 0.1 * amountLoan
+    );
 
     if (amountLoan > 0 && depositGreater) {
       console.log('loan approved');
@@ -160,9 +164,19 @@ btnLogin.addEventListener('click', function (e) {
       inputLoanAmount.value = '';
     }
 
-
     // console.log(depositGreater);
-  })
+  });
+
+  //Sort Movement
+
+  //sort boolean
+  let sorted = false;
+  btnSort.addEventListener('click', function (e) {
+    e.preventDefault();
+    // console.log('You can sort');
+    displayMovement(currentAcct.movements, !sorted);
+    sorted = !sorted;
+  });
 })
 
 
@@ -192,20 +206,25 @@ const summary = function (acct) {
   // console.log(income + out);
 }
 
-const displayMovement = function (movements) {
+const displayMovement = function (movements, sort = false) {
+
+  const acctMovement = sort? (movements.slice().sort((a,b)=> a - b)) : movements; 
+
+
   containerMovements.innerHTML = '';
-  movements.forEach((mov,i) => {
+  acctMovement.forEach((mov, i) => {
     const type = mov < 0 ? 'withdrawal' : 'deposit';
     const html = `
         <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
+          <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
           <div class="movements__date">3 days ago</div>
           <div class="movements__value">${Math.abs(mov)}€</div>
         </div>
     `;
 
-    containerMovements.insertAdjacentHTML('afterbegin', html)
-
+    containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 }
 
@@ -319,11 +338,9 @@ console.log(balance);
 const acctName = accounts.find(name => name.owner === 'Sarah Smith');
 
 console.log(acctName);
-*/
 
 //SOME METHOD
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-// const movements = [200, 450, 400, 3000, 650, 130, 70, 1300];
 
 //used for equality
 const depositAvailable = movements.includes(4000);
@@ -353,3 +370,47 @@ console.log(overallAmount);
 //USING THE FLATMAP METHOD.
 const overallAmount2 = accounts.flatMap(mov=> mov.movements).reduce((acc,cur)=> acc + cur);
 console.log(overallAmount2);
+
+
+
+//SORT METHOD: Note, this will mutate(change) the original array
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const str = ['Moses', 'Ese', 'Zion', 'Anu', 'David', 'Bola'];
+
+
+// return < 0, A, B (/keep Order)
+// return > 0, B, A (/Switch Order)
+
+// console.log(str.sort());
+console.log(movements);
+
+//ascending order
+// const numbers = movements.sort((a,b)=> {
+//   if (a > b) {//this will switch
+//     return 1;
+//   }
+//   if (a < b) {//this will keep order
+//     return -1;
+//   }
+// });
+const numbers = movements.sort((a,b)=> a - b);
+console.log(numbers);
+
+
+const movements2 = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+//Descending order
+// const numbers2 = movements2.sort((a, b) => {
+//   if (a > b) {
+//     return -1;
+//   }
+//   if (a < b) {
+//     return 1;
+//   }
+// });
+
+const numbers2 = movements.sort((a, b) => b - a);
+console.log(numbers2);
+
+*/
