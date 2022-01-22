@@ -414,3 +414,32 @@ const numbers2 = movements.sort((a, b) => b - a);
 console.log(numbers2);
 
 */
+
+
+//MORE WAYS OF CREATING AND FILLING ARRAYS
+
+const arr = [1,2,3,4,5,6,7];
+const x = new Array(7);
+//FILL METHOD
+x.fill(4);
+
+arr.fill(8, 2,4)
+
+console.log(x);
+console.log(arr);
+
+// Array.from
+const y = Array.from({ length: 10 }, (cur, i) => i + 1);
+
+// console.log(y);
+
+document.querySelector('body').addEventListener('click', function () {
+  const movementRetrieve = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', ''))
+  );
+  console.log(movementRetrieve);
+  
+})
+
+
