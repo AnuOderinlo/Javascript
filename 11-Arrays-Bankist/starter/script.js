@@ -64,12 +64,13 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 
 //THE BACKIST APP
+let currentAcct;
 
 //login
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const currentAcct = accounts.find(function (acct) {
+  currentAcct = accounts.find(function (acct) {
     return (
       acct.username === inputLoginUsername.value &&
       acct.pin == Number(inputLoginPin.value)
@@ -93,91 +94,93 @@ btnLogin.addEventListener('click', function (e) {
     // console.log('username or password is not correct');
   }
 
-  //Transfer Money
-  btnTransfer.addEventListener('click', function (e) {
-    e.preventDefault();
-    const amount = Number(inputTransferAmount.value);
-    const receiverAcct = accounts.find(
-      acct => inputTransferTo.value === acct.username
-    );
-    // console.log(receiverAcct, currentAcct);
-    if (
-      amount > 0 &&
-      amount <= currentAcct.balance &&
-      receiverAcct?.username !== currentAcct.username
-    ) {
-      console.log('You can transfer the money');
 
-      //empty the inputs(amount and username);
-      inputTransferAmount.value = inputTransferTo.value = '';
-
-      //amount added to receiver balance and deducted from sender
-      receiverAcct.movements.push(amount);
-      currentAcct.movements.push(-amount);
-
-      //update sender interface account
-      updateAccountUI(currentAcct);
-    }
-  });
-
-  //delete account
-  btnClose.addEventListener('click', function (e) {
-    e.preventDefault();
-    console.log('delete');
-
-    if (
-      inputCloseUsername.value === currentAcct.username &&
-      Number(inputClosePin.value) === currentAcct.pin
-    ) {
-      const index = accounts.findIndex(function (acct) {
-        return inputCloseUsername.value === currentAcct.username;
-      });
-
-      //delete current account
-      accounts.splice(index, 1);
-
-      //update UI by hiding account
-      containerApp.style.opacity = 0;
-    }
-    console.log(accounts);
-    inputCloseUsername.value = inputClosePin.value = '';
-  });
-
-  //Get Loan
-  btnLoan.addEventListener('click', function (e) {
-    e.preventDefault();
-    const amountLoan = Number(inputLoanAmount.value);
-    const depositGreater = currentAcct.movements.some(
-      mov => mov > 0.1 * amountLoan
-    );
-
-    if (amountLoan > 0 && depositGreater) {
-      console.log('loan approved');
-
-      //amount added to receiver balance and deducted from sender
-      currentAcct.movements.push(amountLoan);
-
-      //update sender interface account
-      updateAccountUI(currentAcct);
-
-      //empty the inputs(amountLoan);
-      inputLoanAmount.value = '';
-    }
-
-    // console.log(depositGreater);
-  });
-
-  //Sort Movement
-
-  //sort boolean
-  let sorted = false;
-  btnSort.addEventListener('click', function (e) {
-    e.preventDefault();
-    // console.log('You can sort');
-    displayMovement(currentAcct.movements, !sorted);
-    sorted = !sorted;
-  });
 })
+
+//Transfer Money
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcct = accounts.find(
+    acct => inputTransferTo.value === acct.username
+  );
+  // console.log(receiverAcct, currentAcct);
+  if (
+    amount > 0 &&
+    amount <= currentAcct.balance &&
+    receiverAcct?.username !== currentAcct.username
+  ) {
+    console.log('You can transfer the money');
+
+    //empty the inputs(amount and username);
+    inputTransferAmount.value = inputTransferTo.value = '';
+
+    //amount added to receiver balance and deducted from sender
+    receiverAcct.movements.push(amount);
+    currentAcct.movements.push(-amount);
+
+    //update sender interface account
+    updateAccountUI(currentAcct);
+  }
+});
+
+//delete account
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  console.log('delete');
+
+  if (
+    inputCloseUsername.value === currentAcct.username &&
+    Number(inputClosePin.value) === currentAcct.pin
+  ) {
+    const index = accounts.findIndex(function (acct) {
+      return inputCloseUsername.value === currentAcct.username;
+    });
+
+    //delete current account
+    accounts.splice(index, 1);
+
+    //update UI by hiding account
+    containerApp.style.opacity = 0;
+  }
+  console.log(accounts);
+  inputCloseUsername.value = inputClosePin.value = '';
+});
+
+//Get Loan
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amountLoan = Number(inputLoanAmount.value);
+  const depositGreater = currentAcct.movements.some(
+    mov => mov > 0.1 * amountLoan
+  );
+
+  if (amountLoan > 0 && depositGreater) {
+    console.log('loan approved');
+
+    //amount added to receiver balance and deducted from sender
+    currentAcct.movements.push(amountLoan);
+
+    //update sender interface account
+    updateAccountUI(currentAcct);
+
+    //empty the inputs(amountLoan);
+    inputLoanAmount.value = '';
+  }
+
+  // console.log(depositGreater);
+});
+
+//Sort Movement
+
+//sort boolean
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  // console.log('You can sort');
+  displayMovement(currentAcct.movements, !sorted);
+  sorted = !sorted;
+});
 
 
 
