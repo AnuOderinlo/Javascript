@@ -81,8 +81,30 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const locale = navigator.language;
-console.log(locale);
+const setLogOutTimer = function () {
+  let timer = 9 * 60;
+
+  const ticTac = () => {
+    let min = String(Math.trunc(timer / 60)).padStart(2, 0);
+    let sec = String(Math.trunc(timer % 60)).padStart(2, 0);
+
+    labelTimer.textContent = `${min}:${sec}`;
+
+    if (timer === 0) {
+      clearInterval(timing);
+      labelWelcome.textContent = `Log in to get started`;
+      containerApp.style.opacity = 0;
+    }
+
+    timer--;
+  };
+
+  ticTac();
+
+  const timing = setInterval(ticTac, 1000);
+  
+  
+}
 
 const formatCurrency = function (value, locale, currency) {
     return new Intl.NumberFormat(locale, {
@@ -113,7 +135,6 @@ const formatDate = function (date,locale) {
 
   return  new Intl.DateTimeFormat(locale).format(date);
 }
-
 
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
@@ -146,7 +167,6 @@ const displayMovements = function (acc, sort = false) {
 
   });
 };
-
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
@@ -211,6 +231,9 @@ const updateUI = function (acc) {
 
   // Display summary
   calcDisplaySummary(acc);
+
+  // Timer
+  setLogOutTimer();
 };
 
 ///////////////////////////////////////
@@ -390,6 +413,18 @@ const num = 2345832.88;
 console.log(new Intl.NumberFormat('en-US').format(num));
 
 // TIMERS
+// setTimeout
 setTimeout(() => {
-  console.log("It is a timeout");
+  // console.log("It is a timeout");
 }, 2500);
+
+//setInterval
+setInterval(() => {
+  const now = new Date();
+  const hour = now.getHours();
+  const min = now.getMinutes();
+  const sec = now.getSeconds();
+
+  // console.log(`${hour}:${min}:${sec}`);
+  // console.log(now);
+}, 1000);
