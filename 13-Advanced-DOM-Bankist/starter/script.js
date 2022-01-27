@@ -209,7 +209,6 @@ const revealSection = function (entries, observer) {
     entry.target.classList.remove('section--hidden');
 
   observer.unobserve(entry.target);
-  console.log(entry);
 }
 
 const sectionObserver = new IntersectionObserver(revealSection, {
@@ -222,3 +221,31 @@ sections.forEach(section=>{
 
   section.classList.add('section--hidden');
 })
+
+
+//////////////////////////////
+// Revealing Images
+
+// select the images
+const images = document.querySelectorAll('.features__img');
+
+// observe the images
+const revealImage = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return
+
+  entry.target.src = entry.target.dataset.src
+  
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  })
+  observer.unobserve(entry.target);
+  console.log(entry);
+}
+const imageObserver = new IntersectionObserver(revealImage, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px'
+})
+
+images.forEach(img=> imageObserver.observe(img))
