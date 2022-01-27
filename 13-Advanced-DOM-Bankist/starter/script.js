@@ -126,6 +126,7 @@ tabContainer.addEventListener('click', function (e) {
 // NAV ANIMATION
 
 const nav = document.querySelector('.nav');
+
 const fadeOut = function (e) {
    if (e.target.classList.contains('nav__link')) {
      // console.log(e.target);
@@ -145,5 +146,55 @@ const fadeOut = function (e) {
 }
 
 nav.addEventListener('mouseover', fadeOut.bind(0.5))
-
 nav.addEventListener('mouseout', fadeOut.bind(1));
+
+
+//////////////////
+// Sticky Navigation
+// const iniCoords = section1.getBoundingClientRect();
+
+// window.addEventListener('scroll', function () {
+//   // console.log(window.scrollY);
+
+//   if (window.scrollY > iniCoords.top) {
+//     nav.classList.add('sticky');
+//   } else {
+//     nav.classList.remove('sticky');
+//   }
+
+// })
+
+// const obsCallback = function (entries, observer) {
+//   entries.forEach(entry => {
+//     console.log(entry);
+//   })
+// }
+
+// const obsOptions = {
+//   root: null,
+//   threshold: 0.1
+// }
+
+const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect().height;
+console.log(navHeight);
+const stickyView= function (entries) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) {
+    nav.classList.add('sticky');
+  }else{
+    nav.classList.remove('sticky');
+
+  }
+  
+  console.log(entry.isIntersecting);
+}
+
+const observer = new IntersectionObserver(stickyView, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+
+});
+observer.observe(header);
