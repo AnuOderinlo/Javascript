@@ -9,7 +9,7 @@ function renderCountry(data, className = '') {
     const { name, symbol } = data.languages[0];
     //   const {name, symbol} = data.currencies;
     const { svg, png } = data.flags;
-    
+      
     const html = `
             <article class="country ${className}">
                 <img class="country__img" src="${data.flags.png}" />
@@ -76,18 +76,18 @@ function renderCountry(data, className = '') {
 
 /*************** PROMISE************* */
 const renderError = function (msg) {
-    countriesContainer.insertAdjacentText('beforeend', msg);
-    // countriesContainer.style.opacity = 1;
-}
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  // countriesContainer.style.opacity = 1;
+};
 
-const getJSON = function (url, errorMsg = "Something went wrong") {
-    return fetch(url).then(promise => {
-      if (!promise.ok) {
-        throw new Error(`${errorMsg} ${promise.status}`);
-      }
-      return promise.json();
-    });
-}
+const getJSON = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url).then(promise => {
+    if (!promise.ok) {
+      throw new Error(`${errorMsg} ${promise.status}`);
+    }
+    return promise.json();
+  });
+};
 
 // const getCountryData = function (country) {
     
