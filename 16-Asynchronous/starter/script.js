@@ -8,7 +8,7 @@ const countriesContainer = document.querySelector('.countries');
 function renderCountry(data, className = '') {
     const { name, symbol } = data.languages[0];
     //   const {name, symbol} = data.currencies;
-    const { svg, png } = data.flags;
+    // const { svg, png } = data.flags;
       
     const html = `
             <article class="country ${className}">
@@ -28,10 +28,10 @@ function renderCountry(data, className = '') {
     `;
     countriesContainer.insertAdjacentHTML('beforeend', html);
 
-    // countriesContainer.style.opacity = 1;
+    countriesContainer.style.opacity = 1;
 
 }
-
+/*
 // function getCountryAndNeighborData(country) {
     
 
@@ -75,6 +75,7 @@ function renderCountry(data, className = '') {
 
 
 /*************** PROMISE************* */
+/*
 const renderError = function (msg) {
   countriesContainer.insertAdjacentText('beforeend', msg);
   // countriesContainer.style.opacity = 1;
@@ -159,3 +160,93 @@ btn.addEventListener('click', function (e) {
 
 getCountryData('nigeria');
 // getCountryData('australia');
+*/
+
+
+/////////// EXPLAINING HOW ASYNCHRONOUS JS WORKS
+// console.log('Test Start');
+// setTimeout(() =>  console.log('0 sec timer'), 0);
+// Promise.resolve('Resovled promise 1').then(res=> console.log(res))
+// console.log('Test end');
+
+
+// const lottery = new Promise(function (resolve, reject) {
+//     console.log('lottery is happening now....');
+//     setTimeout(() => {
+//          if (Math.random() >= 0.5) {
+//            resolve('You win a lottery');
+//          } else {
+//            reject(new Error('You lost'));
+//          }
+//     }, 2000);
+   
+// });
+
+
+
+// lottery.then(res=>{
+//     console.log(res);
+// }).catch(err=> console.error(err))
+
+
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  })
+}
+
+
+// wait(4)
+//   .then(() => {
+//     console.log('I waited for 4  seconds');
+//     return wait(3);
+//   })
+//   .then(() => {
+//     console.log('I waited for 3 second');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     console.log('I waited for 2 second');
+//     // return wait(2);
+//   });
+
+
+const geoLocation = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(position=> resolve(position), err=> reject(err));
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+}
+
+// geoLocation.then(pos =>{
+//   const {latitude, longitude} = pos.coords
+//    console.log(latitude, longitude);
+// }) 
+
+const whereAmI = function () {
+  geoLocation().then(pos => {
+    const { latitude: lat, longitude:lng } = pos.coords;
+    console.log(lat, lng);
+    return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(`Problem with geocoding ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      const country = data.country;
+      return fetch(`https://restcountries.com/v2/name/${country}`);
+    })
+    .then(res => {
+      if (!res.ok) throw new Error(`could not found country ${res.status}`);
+      return res.json();
+      console.log(res.json());
+    })
+    .then(([data]) => {
+      renderCountry(data)
+      console.log(data.name);
+    })
+    .catch(err => console.error(`${err.message}`));
+};
+
+btn.addEventListener('click', whereAmI);
