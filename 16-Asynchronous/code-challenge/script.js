@@ -74,11 +74,12 @@ createImage("img/img-1.jpg")
     })
     .then((img)=>{
         currImage = img;
+        console.log("image 2 loaded");
         return wait(2);
         console.log(currImage);
     })
     .then(()=>{
         currImage.style.display = 'none';
         return createImage("img/img-3.jpg");
-    })
+    }).then(()=> console.log("image 3 loaded"))
     .catch(err=> console.log(err))

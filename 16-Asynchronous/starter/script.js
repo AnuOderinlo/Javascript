@@ -223,30 +223,52 @@ const geoLocation = function () {
 //    console.log(latitude, longitude);
 // }) 
 
-const whereAmI = function () {
-  geoLocation().then(pos => {
-    const { latitude: lat, longitude:lng } = pos.coords;
-    console.log(lat, lng);
-    return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
-  })
-    .then(res => {
-      if (!res.ok) throw new Error(`Problem with geocoding ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      const country = data.country;
-      return fetch(`https://restcountries.com/v2/name/${country}`);
-    })
-    .then(res => {
-      if (!res.ok) throw new Error(`could not found country ${res.status}`);
-      return res.json();
-      console.log(res.json());
-    })
-    .then(([data]) => {
-      renderCountry(data)
-      console.log(data.name);
-    })
-    .catch(err => console.error(`${err.message}`));
-};
+// const whereAmI = function () {
+//   geoLocation().then(pos => {
+//     const { latitude: lat, longitude:lng } = pos.coords;
+//     console.log(lat, lng);
+//     return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//   })
+//     .then(res => {
+//       if (!res.ok) throw new Error(`Problem with geocoding ${res.status}`);
+//       return res.json();
+//     })
+//     .then(data => {
+//       const country = data.country;
+//       return fetch(`https://restcountries.com/v2/name/${country}`);
+//     })
+//     .then(res => {
+//       if (!res.ok) throw new Error(`could not found country ${res.status}`);
+//       return res.json();
+//       console.log(res.json());
+//     })
+//     .then(([data]) => {
+//       renderCountry(data)
+//       console.log(data.name);
+//     })
+//     .catch(err => console.error(`${err.message}`));
+// };
 
-btn.addEventListener('click', whereAmI);
+// btn.addEventListener('click', whereAmI);
+
+
+const whereAmI = async function () {
+
+  // Getting the coordinates
+  const geoPos = await geoLocation();
+  const { latitude: lat, longitude: lng } = geoPos.coords;
+
+  // Fetching geolocation data
+  const resPos = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+  const resData = await resPos.json();
+  console.log(resData);
+
+  //Fetching Country data
+  const res = await fetch(`https://restcountries.com/v2/name/${resData.country}`);
+  const [data] = await res.json();
+
+  renderCountry(data);
+}
+
+
+whereAmI()
