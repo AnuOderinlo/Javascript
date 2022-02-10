@@ -80,7 +80,6 @@ const renderError = function (msg) {
   countriesContainer.style.opacity = 1;
 };
 
-/*
 const getJSON = function (url, errorMsg = 'Something went wrong') {
   return fetch(url).then(promise => {
     if (!promise.ok) {
@@ -89,6 +88,7 @@ const getJSON = function (url, errorMsg = 'Something went wrong') {
     return promise.json();
   });
 };
+/*
 
 // const getCountryData = function (country) {
     
@@ -297,12 +297,34 @@ console.log('1. will get location');
 
 // console.log('2. finished getting location');
 
-(async function () {
+// (async function () {
+//   try {
+//     const city = await whereAmI();
+//     console.log(city);
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+//   console.log('3.Finished getting location')
+// })()
+
+
+/////////////////////////
+// Running promises in Parallel(i.e not depending on each other)
+
+const get3Countries = async function (c1, c2, c3) {
   try {
-    const city = await whereAmI();
-    console.log(city);
-  } catch (err) {
-    console.log(err.message);
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v2/name/${c1}`),
+      getJSON(`https://restcountries.com/v2/name/${c2}`),
+      getJSON(`https://restcountries.com/v2/name/${c3}`),
+    ]);
+
+    // data.map(([dt])=> dt.capital)
+    console.log(data.map(([dt]) => dt.capital));
+  } catch (error) {
+    console.error(error)
   }
-  console.log('3.Finished getting location')
-})()
+  
+}
+
+get3Countries('nigeria', 'ghana', 'canada')
