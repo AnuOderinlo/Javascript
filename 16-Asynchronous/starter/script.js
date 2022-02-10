@@ -251,6 +251,8 @@ const geoLocation = function () {
 
 // btn.addEventListener('click', whereAmI);
 
+/////////////////////
+// Using Async and Await 
 
 const whereAmI = async function () {
 
@@ -280,6 +282,7 @@ const whereAmI = async function () {
     renderCountry(data);
 
     return `You are in ${resData.city}, in ${resData.country}`;
+
   } catch (err) {
     renderError(err.message);
 
