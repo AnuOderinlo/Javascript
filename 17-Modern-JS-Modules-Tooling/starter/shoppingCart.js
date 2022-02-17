@@ -12,3 +12,6 @@ export default function (product, quantity) {
 const totalPrice = 350;
 
 export {cart, cost, totalPrice}
+
+
+
