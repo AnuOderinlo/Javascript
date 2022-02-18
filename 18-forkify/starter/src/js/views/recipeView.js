@@ -1,22 +1,26 @@
 import icons from 'url:../../img/icons.svg';
+import { View  } from "./view";
 
 import {Fraction} from "Fractional";
 
 
-class RecipeView {
-    #parentEl = document.querySelector('.recipe');
-    #data;
+// class RecipeView extends View {
+class RecipeView{
+    _parentEl = document.querySelector('.recipe');
+    _data;
+    _errMsg = 'Could not find the recipe you are looking for!'
+    _successMsg = 'awesome!!!!'
 
     render(data) {
-        this.#data = data;
-        const markup = this.#generateMarkup();
+        this._data = data;
+        const markup = this._generateMarkup();
 
-        this.#clear();
-        this.#parentEl.insertAdjacentHTML('afterbegin', markup);
+        this._clear();
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
     }
 
-    #clear() {
-        this.#parentEl.innerHTML = '';
+    _clear() {
+        this._parentEl.innerHTML = '';
     }
 
     spinnerHTML() {
@@ -27,19 +31,19 @@ class RecipeView {
                 </svg>
             </div>
             `
-        this.#clear();
-        this.#parentEl.insertAdjacentHTML('afterbegin', markup);
+        this._clear();
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
     }
 
 
-    #generateMarkup() {
+    _generateMarkup() {
         return `
         <figure class="recipe__fig  ">
-            <img src="${this.#data.image}" alt="${
-        this.#data.title
+            <img src="${this._data.image}" alt="${
+        this._data.title
         }" class="recipe__img" />
             <h1 class="recipe__title">
-            <span>${this.#data.title}</span>
+            <span>${this._data.title}</span>
             </h1>
         </figure>
 
@@ -49,7 +53,7 @@ class RecipeView {
                 <use href="${icons}#icon-clock"></use>
             </svg>
             <span class="recipe__info-data recipe__info-data--minutes">${
-                this.#data.cookingTime
+                this._data.cookingTime
             }</span>
             <span class="recipe__info-text">minutes</span>
             </div>
@@ -58,7 +62,7 @@ class RecipeView {
                 <use href="${icons}#icon-users"></use>
             </svg>
             <span class="recipe__info-data recipe__info-data--people">${
-                this.#data.servings
+                this._data.servings
             }</span>
             <span class="recipe__info-text">servings</span>
 
@@ -92,8 +96,8 @@ class RecipeView {
             <h2 class="heading--2">Recipe ingredients</h2>
             <ul class="recipe__ingredient-list">
 
-            ${this.#data.ingredients
-                .map(this.#generateIngredient)
+            ${this._data.ingredients
+                .map(this._generateIngredient)
                 .join('')}
 
             </ul>
@@ -104,13 +108,13 @@ class RecipeView {
             <p class="recipe__directions-text">
             This recipe was carefully designed and tested by
             <span class="recipe__publisher">${
-                this.#data.publisher
+                this._data.publisher
             }</span>. Please check out
             directions at their website.
             </p>
             <a
             class="btn--small recipe__btn"
-            href="${this.#data.sourceUrl}"
+            href="${this._data.sourceUrl}"
             target="_blank"
             >
             <span>Directions</span>
@@ -123,7 +127,7 @@ class RecipeView {
         `;
     }
 
-    #generateIngredient(ing){
+    _generateIngredient(ing){
         return `<li class="recipe__ingredient">
                     <svg class="recipe__icon">
                         <use href="${icons}#icon-check"></use>
@@ -136,6 +140,45 @@ class RecipeView {
                         ${ing.description}
                     </div>
                 </li>`;
+    }
+
+    addHandlerRender(handler){
+        const events = ['hashchange', 'load'];
+        events.forEach(ev => window.addEventListener(ev, handler));
+    }
+
+
+    errorMessage(msg= this._errMsg){
+        const markup = `
+            <div class="error">
+                <div>
+                    <svg>
+                        <use href="${icons}.svg#icon-alert-triangle"></use>
+                    </svg>
+                </div>
+                <p>${msg}</p>
+            </div> 
+        
+        `;
+        this._clear();
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    }
+
+
+    successMessage(msg= this._successMsg){
+        const markup = `
+            <div class="message">
+                <div>
+                    <svg>
+                        <use href="${icons}.svg#icon-smile"></use>
+                    </svg>
+                </div>
+                <p>Start by searching for a recipe or an ingredient. Have fun!</p>
+            </div> 
+        
+        `;
+        this._clear();
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
     }
 }
 

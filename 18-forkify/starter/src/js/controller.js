@@ -1,11 +1,13 @@
 import * as model from './model';
 import recipeView from './views/recipeView.js'
+import searchView from './views/searchView.js'
 
 
 
 
 import "core-js/stable";//this is for polyfill for others
 import "regenerator-runtime/runtime";//this is polyfill async await
+import { async } from 'regenerator-runtime';
 
 
 const recipeContainer = document.querySelector('.recipe');
@@ -25,6 +27,7 @@ const controlRecipe = async function () {
     if (!id) return;
     
     recipeView.spinnerHTML();
+    
     /*1. loading Recipe*/
     await model.loadRecipe(id)// this is from the model
 
@@ -34,14 +37,36 @@ const controlRecipe = async function () {
     recipeView.render(model.state.recipe)// this is from the view
     
   }catch (err) {
-    alert(err)
+    // console.log(err);
+    console.log(err);
+    recipeView.errorMessage();
+    
   }
 }
 
-// controlRecipe();
-const events = ['hashchange', 'load'];
-events.forEach(ev => window.addEventListener(ev, controlRecipe));
 
+const controlSearch = async function () {
+  try {
+    // 1. Get query
+    const query = searchView.getQuery();
+
+    if (!query) return
+
+    // 2. Load search results
+    await model.loadSearchRecipe(query);
+  } catch (err) {
+      console.log(err);
+  }
+}
+// controlRecipe();
+// const events = ['hashchange', 'load'];
+// events.forEach(ev => window.addEventListener(ev, controlRecipe));
+
+const init = function () {
+  recipeView.addHandlerRender(controlRecipe);
+  searchView.addHandlerSearchRender(controlSearch)
+}
+
+init()
 // window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
-
