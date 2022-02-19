@@ -1,6 +1,8 @@
 import * as model from './model';
 import recipeView from './views/recipeView.js'
 import searchView from './views/searchView.js'
+import resultView from './views/resultView.js'
+import paginationView from './views/paginationView.js'
 
 
 
@@ -10,6 +12,10 @@ import "regenerator-runtime/runtime";//this is polyfill async await
 import { async } from 'regenerator-runtime';
 
 
+// if (module.hot) {
+//   module.hot.accept();
+// }
+
 const recipeContainer = document.querySelector('.recipe');
 
 
@@ -18,7 +24,6 @@ const recipeContainer = document.querySelector('.recipe');
 
 ///////////////////////////////////////
 
-// render spinner
 
 const controlRecipe = async function () {
   try {
@@ -47,15 +52,26 @@ const controlRecipe = async function () {
 
 const controlSearch = async function () {
   try {
+    resultView.spinnerHTML();
     // 1. Get query
     const query = searchView.getQuery();
 
-    if (!query) return
+    if (!query) return;
 
     // 2. Load search results
     await model.loadSearchRecipe(query);
+
+    // 3. render the the search result
+    // resultView.render(model.state.search.result); // this is from the view
+    resultView.render(model.loadSearchResultPerPage()); // this is from the view
+
+    // 4. Render search result per page
+    paginationView.render(model.state.search)
+
+
   } catch (err) {
-      console.log(err);
+    console.log(err);
+    resultView.errorMessage();
   }
 }
 // controlRecipe();
@@ -65,8 +81,16 @@ const controlSearch = async function () {
 const init = function () {
   recipeView.addHandlerRender(controlRecipe);
   searchView.addHandlerSearchRender(controlSearch)
+  paginationView.addHandlerForClick(controlPagination);
+}
+
+const controlPagination = function (page) {
+  // 3. render the the search result
+  resultView.render(model.loadSearchResultPerPage(page)); // this is from the view
+
+  // 4. Render search result per page
+  paginationView.render(model.state.search);
+  // console.log();
 }
 
 init()
-// window.addEventListener('hashchange', controlRecipe);
-// window.addEventListener('load', controlRecipe);

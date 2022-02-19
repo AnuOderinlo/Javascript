@@ -1,13 +1,15 @@
 import 'core-js/stable'; //this is for polyfill for others
 import 'regenerator-runtime/runtime'; //this is polyfill async await
-import { API_URL } from "./config";
+import { API_URL, PER_PAGE } from './config';
 import { getJSON } from "./helpers";
 
 export const state = {
     recipe: {},
     search: {
         query:'',
-        result: []
+        page: 1,
+        result: [],
+        searchPerPage: PER_PAGE
         
     }
 };
@@ -55,12 +57,22 @@ export const loadSearchRecipe = async function (query) {
         })
         
 
-        console.log(state.search);
-
-
+        
+        
     } catch (err) {
         console.log(err);
     }
 }
 
 // loadSearchRecipe('chicken')
+
+export const loadSearchResultPerPage = function (page = 1) {
+    state.search.page = page;
+    
+    const start = (page - 1) * state.search.searchPerPage;
+    const end = (page) * state.search.searchPerPage;
+    
+    // console.log(state.search);
+    return state.search.result.slice(start, end)
+
+}

@@ -1,39 +1,15 @@
+// import icons from 'url:../../img/icons.svg';
+import  View  from "./view";
 import icons from 'url:../../img/icons.svg';
-import { View  } from "./view";
 
 import {Fraction} from "Fractional";
 
 
 // class RecipeView extends View {
-class RecipeView{
+class RecipeView extends View{
     _parentEl = document.querySelector('.recipe');
-    _data;
     _errMsg = 'Could not find the recipe you are looking for!'
     _successMsg = 'awesome!!!!'
-
-    render(data) {
-        this._data = data;
-        const markup = this._generateMarkup();
-
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
-    }
-
-    _clear() {
-        this._parentEl.innerHTML = '';
-    }
-
-    spinnerHTML() {
-        const markup =  ` 
-            <div class="spinner">
-                <svg>
-                    <use href="${icons}#icon-loader"></use>
-                </svg>
-            </div>
-            `
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
-    }
 
 
     _generateMarkup() {
@@ -49,46 +25,44 @@ class RecipeView{
 
         <div class="recipe__details">
             <div class="recipe__info">
-            <svg class="recipe__info-icon">
-                <use href="${icons}#icon-clock"></use>
-            </svg>
-            <span class="recipe__info-data recipe__info-data--minutes">${
-                this._data.cookingTime
-            }</span>
-            <span class="recipe__info-text">minutes</span>
+                <svg class="recipe__info-icon">
+                    <use href="${icons}#icon-clock"></use>
+                </svg>
+                <span class="recipe__info-data recipe__info-data--minutes">${
+                    this._data.cookingTime
+                }</span>
+                <span class="recipe__info-text">minutes</span>
             </div>
             <div class="recipe__info">
-            <svg class="recipe__info-icon">
-                <use href="${icons}#icon-users"></use>
-            </svg>
-            <span class="recipe__info-data recipe__info-data--people">${
-                this._data.servings
-            }</span>
-            <span class="recipe__info-text">servings</span>
+                <svg class="recipe__info-icon">
+                    <use href="${icons}#icon-users"></use>
+                </svg>
+                <span class="recipe__info-data recipe__info-data--people">${
+                    this._data.servings
+                }</span>
+                <span class="recipe__info-text">servings</span>
 
-            <div class="recipe__info-buttons">
-                <button class="btn--tiny btn--increase-servings">
-                <svg>
-                    <use href="${icons}#icon-minus-circle"></use>
-                </svg>
-                </button>
-                <button class="btn--tiny btn--increase-servings">
-                <svg>
-                    <use href="${icons}#icon-plus-circle"></use>
-                </svg>
-                </button>
-            </div>
+                <div class="recipe__info-buttons">
+                    <button class="btn--tiny btn--increase-servings">
+                    <svg>
+                        <use href="${icons}#icon-minus-circle"></use>
+                    </svg>
+                    </button>
+                    <button class="btn--tiny btn--increase-servings">
+                    <svg>
+                        <use href="${icons}#icon-plus-circle"></use>
+                    </svg>
+                    </button>
+                </div>
             </div>
 
             <div class="recipe__user-generated">
-            <svg>
-                <use href="${icons}#icon-user"></use>
-            </svg>
+               
             </div>
             <button class="btn--round">
-            <svg class="">
-                <use href="${icons}#icon-bookmark-fill"></use>
-            </svg>
+                <svg class="">
+                    <use href="${icons}#icon-bookmark-fill"></use>
+                </svg>
             </button>
         </div>
 
@@ -127,20 +101,7 @@ class RecipeView{
         `;
     }
 
-    _generateIngredient(ing){
-        return `<li class="recipe__ingredient">
-                    <svg class="recipe__icon">
-                        <use href="${icons}#icon-check"></use>
-                    </svg>
-                    <div class="recipe__quantity">
-                        ${ing.quantity ? new Fraction(ing.quantity) : ''}
-                    </div>
-                    <div class="recipe__description">
-                        <span class="recipe__unit">${ing.unit}</span>
-                        ${ing.description}
-                    </div>
-                </li>`;
-    }
+   
 
     addHandlerRender(handler){
         const events = ['hashchange', 'load'];
@@ -148,38 +109,7 @@ class RecipeView{
     }
 
 
-    errorMessage(msg= this._errMsg){
-        const markup = `
-            <div class="error">
-                <div>
-                    <svg>
-                        <use href="${icons}.svg#icon-alert-triangle"></use>
-                    </svg>
-                </div>
-                <p>${msg}</p>
-            </div> 
-        
-        `;
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
-    }
-
-
-    successMessage(msg= this._successMsg){
-        const markup = `
-            <div class="message">
-                <div>
-                    <svg>
-                        <use href="${icons}.svg#icon-smile"></use>
-                    </svg>
-                </div>
-                <p>Start by searching for a recipe or an ingredient. Have fun!</p>
-            </div> 
-        
-        `;
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
-    }
+    
 }
 
 export default new RecipeView();
