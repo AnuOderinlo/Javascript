@@ -548,6 +548,7 @@ const controlRecipe = async function() {
         // const {recipe} = model.state
         /* 2. redering recipe*/ _recipeViewJsDefault.default.render(_model.state.recipe) // this is from the view
         ;
+    // controlServings()//temporary kept here
     } catch (err) {
         // console.log(err);
         console.log(err);
@@ -577,6 +578,7 @@ const controlSearch = async function() {
 // events.forEach(ev => window.addEventListener(ev, controlRecipe));
 const init = function() {
     _recipeViewJsDefault.default.addHandlerRender(controlRecipe);
+    _recipeViewJsDefault.default.addHandlerForServings(controlServings);
     _searchViewJsDefault.default.addHandlerSearchRender(controlSearch);
     _paginationViewJsDefault.default.addHandlerForClick(controlPagination);
 };
@@ -586,6 +588,10 @@ const controlPagination = function(page) {
     // 4. Render search result per page
     _paginationViewJsDefault.default.render(_model.state.search);
 // console.log();
+};
+const controlServings = function(newServings) {
+    _model.updateServings(newServings);
+    _recipeViewJsDefault.default.render(_model.state.recipe); // this is from the view
 };
 init();
 
@@ -1661,6 +1667,8 @@ parcelHelpers.export(exports, "loadSearchRecipe", ()=>loadSearchRecipe
 );
 parcelHelpers.export(exports, "loadSearchResultPerPage", ()=>loadSearchResultPerPage
 );
+parcelHelpers.export(exports, "updateServings", ()=>updateServings
+);
 var _webImmediateJs = require("core-js/modules/web.immediate.js");
 var _runtime = require("regenerator-runtime/runtime"); //this is polyfill async await
 var _config = require("./config");
@@ -1689,7 +1697,7 @@ const loadRecipe = async function(id) {
             sourceUrl: recipe.source_url,
             title: recipe.title
         };
-    // console.log(state.recipe);
+        console.log(state.recipe);
     } catch (err) {
         // console.log(`${err} from model`);
         throw err;
@@ -1719,6 +1727,13 @@ const loadSearchResultPerPage = function(page = 1) {
     const end = page * state.search.searchPerPage;
     // console.log(state.search);
     return state.search.result.slice(start, end);
+};
+const updateServings = function(newServings = state.recipe.servings) {
+    //updating the ingredients based on the new servings
+    state.recipe.ingredients.forEach((ing)=>{
+        ing.quantity = ing.quantity * newServings / state.recipe.servings;
+    });
+    state.recipe.servings = newServings;
 };
 
 },{"core-js/modules/web.immediate.js":"mvNC2","regenerator-runtime/runtime":"dXNgZ","./config":"k5Hzs","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dXNgZ":[function(require,module,exports) {
@@ -2386,6 +2401,15 @@ class RecipeView extends _viewDefault.default {
     _parentEl = document.querySelector('.recipe');
     _errMsg = 'Could not find the recipe you are looking for!';
     _successMsg = 'awesome!!!!';
+    addHandlerForServings(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            e.preventDefault();
+            const btn = e.target.closest('.btn--increase-servings');
+            const update = +btn.dataset.update;
+            if (!btn) return;
+            if (update > 0) handler(update);
+        });
+    }
     _generateMarkup() {
         return `
         <figure class="recipe__fig  ">
@@ -2411,12 +2435,12 @@ class RecipeView extends _viewDefault.default {
                 <span class="recipe__info-text">servings</span>
 
                 <div class="recipe__info-buttons">
-                    <button class="btn--tiny btn--increase-servings">
+                    <button data-update="${this._data.servings - 1}" class="btn--tiny decrease btn--increase-servings">
                     <svg>
                         <use href="${_iconsSvgDefault.default}#icon-minus-circle"></use>
                     </svg>
                     </button>
-                    <button class="btn--tiny btn--increase-servings">
+                    <button data-update="${this._data.servings + 1}" class="btn--tiny increase btn--increase-servings">
                     <svg>
                         <use href="${_iconsSvgDefault.default}#icon-plus-circle"></use>
                     </svg>

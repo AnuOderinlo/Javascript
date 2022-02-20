@@ -10,7 +10,6 @@ export const state = {
         page: 1,
         result: [],
         searchPerPage: PER_PAGE
-        
     }
 };
 
@@ -33,7 +32,7 @@ export const loadRecipe = async function (id) {
             title: recipe.title,
         };
 
-        // console.log(state.recipe);
+        console.log(state.recipe);
     } catch (err) {
         // console.log(`${err} from model`);
         throw err;
@@ -75,4 +74,15 @@ export const loadSearchResultPerPage = function (page = 1) {
     // console.log(state.search);
     return state.search.result.slice(start, end)
 
+}
+
+
+export const updateServings = function (newServings = state.recipe.servings) {
+
+    //updating the ingredients based on the new servings
+    state.recipe.ingredients.forEach(ing => {
+        ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
+    });
+
+    state.recipe.servings = newServings;
 }
