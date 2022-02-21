@@ -543,6 +543,8 @@ const controlRecipe = async function() {
         const id = window.location.hash.slice(1);
         if (!id) return;
         _recipeViewJsDefault.default.spinnerHTML();
+        // 0. render the the search result with Marked highlight
+        _resultViewJsDefault.default.update(_model.loadSearchResultPerPage());
         /*1. loading Recipe*/ await _model.loadRecipe(id) // this is from the model
         ;
         // const {recipe} = model.state
@@ -564,7 +566,6 @@ const controlSearch = async function() {
         // 2. Load search results
         await _model.loadSearchRecipe(query);
         // 3. render the the search result
-        // resultView.render(model.state.search.result); // this is from the view
         _resultViewJsDefault.default.render(_model.loadSearchResultPerPage()); // this is from the view
         // 4. Render search result per page
         _paginationViewJsDefault.default.render(_model.state.search);
@@ -583,15 +584,16 @@ const init = function() {
     _paginationViewJsDefault.default.addHandlerForClick(controlPagination);
 };
 const controlPagination = function(page) {
-    // 3. render the the search result
+    // 1. render the the search result
     _resultViewJsDefault.default.render(_model.loadSearchResultPerPage(page)); // this is from the view
-    // 4. Render search result per page
+    // 2. Render search result per page
     _paginationViewJsDefault.default.render(_model.state.search);
 // console.log();
 };
 const controlServings = function(newServings) {
     _model.updateServings(newServings);
-    _recipeViewJsDefault.default.render(_model.state.recipe); // this is from the view
+    // recipeView.render(model.state.recipe); // this is from the view
+    _recipeViewJsDefault.default.update(_model.state.recipe); // this is from the view
 };
 init();
 
@@ -1697,7 +1699,7 @@ const loadRecipe = async function(id) {
             sourceUrl: recipe.source_url,
             title: recipe.title
         };
-        console.log(state.recipe);
+    // console.log(state.recipe);
     } catch (err) {
         // console.log(`${err} from model`);
         throw err;
@@ -2517,6 +2519,26 @@ class View {
         this._clear();
         this._parentEl.insertAdjacentHTML('afterbegin', markup);
     }
+    update(data) {
+        // if (!data || (Array.isArray && data.length === 0) ) return this.errorMessage()
+        this._data = data;
+        const newMarkup = this._generateMarkup();
+        const newDom = document.createRange().createContextualFragment(newMarkup);
+        const newElements = Array.from(newDom.querySelectorAll('*'));
+        const currElements = Array.from(this._parentEl.querySelectorAll('*'));
+        // console.log(newElements, currElements);
+        newElements.forEach((newEl, i)=>{
+            const currEl = currElements[i];
+            // update changed Text in the DOM
+            if (!newEl.isEqualNode(currEl) && newEl.firstChild.nodeValue.trim() !== '') currEl.textContent = newEl.textContent;
+            // update changed Attributes in the DOM
+            if (!newEl.isEqualNode(currEl)) // console.log(newEl.attributes);
+            Array.from(newEl.attributes).forEach((attr)=>{
+                console.log(attr.name, attr.value);
+                currEl.setAttribute(attr.name, attr.value);
+            });
+        });
+    }
     _clear() {
         this._parentEl.innerHTML = '';
     }
@@ -2907,9 +2929,10 @@ class ResultView extends _viewDefault.default {
         return this._data.map(this._generateMarkupPreview);
     }
     _generateMarkupPreview(dt) {
+        const id = window.location.hash.slice(1);
         return `
                 <li class="preview">
-                    <a class="preview__link " href="#${dt.id}">
+                    <a class="preview__link ${dt.id === id ? 'preview__link--active' : ''}" href="#${dt.id}">
                     <figure class="preview__fig">
                         <img src="${dt.image}" alt="Test" />
                     </figure>

@@ -32,7 +32,7 @@ export const loadRecipe = async function (id) {
             title: recipe.title,
         };
 
-        console.log(state.recipe);
+        // console.log(state.recipe);
     } catch (err) {
         // console.log(`${err} from model`);
         throw err;

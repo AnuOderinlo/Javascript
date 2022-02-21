@@ -32,6 +32,9 @@ const controlRecipe = async function () {
     if (!id) return;
     
     recipeView.spinnerHTML();
+
+    // 0. render the the search result with Marked highlight
+    resultView.update(model.loadSearchResultPerPage());
     
     /*1. loading Recipe*/
     await model.loadRecipe(id)// this is from the model
@@ -63,7 +66,6 @@ const controlSearch = async function () {
     await model.loadSearchRecipe(query);
 
     // 3. render the the search result
-    // resultView.render(model.state.search.result); // this is from the view
     resultView.render(model.loadSearchResultPerPage()); // this is from the view
 
     // 4. Render search result per page
@@ -87,10 +89,10 @@ const init = function () {
 }
 
 const controlPagination = function (page) {
-  // 3. render the the search result
+  // 1. render the the search result
   resultView.render(model.loadSearchResultPerPage(page)); // this is from the view
 
-  // 4. Render search result per page
+  // 2. Render search result per page
   paginationView.render(model.state.search);
   // console.log();
 }
@@ -98,7 +100,8 @@ const controlPagination = function (page) {
 const controlServings = function (newServings) {
 
   model.updateServings(newServings);
-  recipeView.render(model.state.recipe); // this is from the view
+  // recipeView.render(model.state.recipe); // this is from the view
+  recipeView.update(model.state.recipe); // this is from the view
 }
 
 
