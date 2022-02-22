@@ -1,4 +1,5 @@
 import View  from "./view";
+import previewView from './previewView';
 import icons from 'url:../../img/icons.svg';
 
 class ResultView extends View{
@@ -6,29 +7,10 @@ class ResultView extends View{
     _errMsg = 'Could not find the recipe search! please try again'
     _successMsg = 'awesome!!!!'
 
-    _generateMarkup() {
-        // console.log(this._data);
-
-        return this._data.map(this._generateMarkupPreview);
+   _generateMarkup() {
+        
+        return this._data.map(result=> previewView.render(result, false)).join('');
        
-    }
-    
-    _generateMarkupPreview(dt){
-        const id = window.location.hash.slice(1);
-
-        return `
-                <li class="preview">
-                    <a class="preview__link ${dt.id === id? 'preview__link--active': ''}" href="#${dt.id}">
-                    <figure class="preview__fig">
-                        <img src="${dt.image}" alt="Test" />
-                    </figure>
-                    <div class="preview__data">
-                        <h4 class="preview__title">${dt.title}</h4>
-                        <p class="preview__publisher">${dt.publisher}</p>
-                    </div>
-                    </a>
-                </li>
-        `;
     }
 }
 

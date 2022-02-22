@@ -7,12 +7,14 @@ export default class View {
     _errMsg = 'Could not find the recipe you are looking for!'
     _successMsg = 'awesome!!!!'
 
-    render(data) {
+    render(data, render = true) {
         if (!data || (Array.isArray && data.length === 0) ) return this.errorMessage()
 
 
         this._data = data;
         const markup = this._generateMarkup();
+
+        if (!render) return markup;
 
         this._clear();
         this._parentEl.insertAdjacentHTML('afterbegin', markup);
@@ -21,7 +23,6 @@ export default class View {
     update(data) {
         // if (!data || (Array.isArray && data.length === 0) ) return this.errorMessage()
 
-
         this._data = data;
         const newMarkup = this._generateMarkup();
 
@@ -29,21 +30,17 @@ export default class View {
         const newElements = Array.from(newDom.querySelectorAll('*'));
         const currElements = Array.from(this._parentEl.querySelectorAll('*'));
 
-        // console.log(newElements, currElements);
         newElements.forEach((newEl, i)=>{
             const currEl = currElements[i];
 
-
             // update changed Text in the DOM
-            if (!newEl.isEqualNode(currEl) && newEl.firstChild.nodeValue.trim() !== '') {
+            if (!newEl.isEqualNode(currEl) && newEl.firstChild?.nodeValue.trim() !== '') {
                 currEl.textContent = newEl.textContent;
             }
             
             // update changed Attributes in the DOM
             if (!newEl.isEqualNode(currEl)) {
-                // console.log(newEl.attributes);
                 Array.from(newEl.attributes).forEach(attr =>{
-                    console.log(attr.name, attr.value);
                     currEl.setAttribute(attr.name, attr.value);
                 })    
             }
