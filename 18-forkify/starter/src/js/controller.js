@@ -4,6 +4,7 @@ import searchView from './views/searchView.js';
 import resultView from './views/resultView.js';
 import paginationView from './views/paginationView.js';
 import bookmarkView from "./views/bookmarkView.js";
+import addRecipeView from "./views/addRecipeView.js";
 
 
 import "core-js/stable";//this is for polyfill for others
@@ -128,6 +129,12 @@ const controlBookmark = function () {
 }
 
 
+const controlRecipeUpload = function (newRecipe) {
+  
+
+  console.log(newRecipe);
+}
+
 
 
 
@@ -137,7 +144,9 @@ const init = function () {
   recipeView.addHandlerBookmark(controlAddBookmark);
   searchView.addHandlerSearchRender(controlSearch);
   paginationView.addHandlerForClick(controlPagination);
-  bookmarkView.addHandlerLoad(controlBookmark)
+  bookmarkView.addHandlerLoad(controlBookmark);
+  
+  addRecipeView.addHandleUpload(controlRecipeUpload);
 };
 
 init()
